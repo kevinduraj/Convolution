@@ -7,49 +7,48 @@ import static java.lang.Math.exp;
 import javax.imageio.ImageIO;
 
 public class Gaussian2D {
-
-    public static void main(String[] args) {
-        int[][] source = ImageRead("src/image/assignment03.png");
-        int[][] dest   = gaussianBlur(source, 1.6f, 15);
-        ImageWrite(dest, "src/image/blured112.png");
-    }
+    
     /* --------------------------------------------------------------------------------------------
-     Blurs image with a Gaussian kernel
+                        Compute Gaussian Kernel
      ---------------------------------------------------------------------------------------------*/
 
-    public static int[][] gaussianBlur(int[][] img, float sigma, int size) {
+    public  float[][] kernel( float sigma, int size) {
 
-        // Generate a sizexsize kernel 
         float[][] kernel = new float[size][size];
         int uc, vc;
         float g, sum;
         sum = 0;
+        
+        /*--- COMPUTE: Kernel Matrix Values ---*/
         for (int u = 0; u < kernel.length; u++) {
             for (int v = 0; v < kernel[0].length; v++) {
-                // Center the Gaussian sample so max is at u,v = 10,10
+                
                 uc = u - (kernel.length - 1) / 2;
                 vc = v - (kernel[0].length - 1) / 2;
-                // Calculate and save
+
                 g = (float) exp(-(uc * uc + vc * vc) / (2 * sigma * sigma));
                 sum += g;
                 kernel[u][v] = g;
+                System.out.format("%.6f ", g);
             }
+            System.out.println();
         }
-        // Normalize it
+        
+        //--- NORMALIZE: Total of all kernel's elemenents = 1.0 ---//
         for (int u = 0; u < kernel.length; u++) {
             for (int v = 0; v < kernel[0].length; v++) {
                 kernel[u][v] /= sum;
             }
         }
-
-        // Convolve and return
-        return convolve(img, kernel);
+        
+        return kernel;
     }
 
     /* --------------------------------------------------------------------------------------------
-     * Convolves a float[][] representation of an image with a kernel of weights
+     *                  Convolves Image with a Kernel 
      * -------------------------------------------------------------------------------------------*/
-    public static int[][] convolve(int[][] img, float[][] kernel) {
+    public  int[][] convolve(int[][] img, float[][] kernel) {
+        
         int xn, yn;
         float average;
 
@@ -78,17 +77,17 @@ public class Gaussian2D {
                         average += img[xn][yn] * kernel[u][v];
                     }
                 } /*--- KERNEL ---*/
-                
+
                 //--- Set output pixel to weighted average value ---//
                 output[x][y] = (int) average;
             }
         } /*--- IMAGE ---*/
-        
+
         return output;
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    public static int constrain(int x, int a, int b) {
+    public int constrain(int x, int a, int b) {
         if (x < a) {
             return a;
         } else if (b < x) {
@@ -99,7 +98,7 @@ public class Gaussian2D {
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    public static int[][] ImageRead(String filename) {
+    public int[][] ImageRead(String filename) {
 
         try {
 
@@ -127,7 +126,7 @@ public class Gaussian2D {
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    public static void ImageWrite(int img[][], String filename) {
+    public void ImageWrite(int img[][], String filename) {
 
         try {
             BufferedImage bi = new BufferedImage(img[0].length, img.length, BufferedImage.TYPE_INT_RGB);
@@ -148,5 +147,4 @@ public class Gaussian2D {
         }
     }
     /*--------------------------------------------------------------------------------------------*/
-
 }
