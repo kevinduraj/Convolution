@@ -11,31 +11,28 @@ public class GaussianBlur {
     private final BufferedImageOp opVer;
     
     /*--------------------------------------------------------------------------------------------*/
-    private GaussianBlur(BufferedImageOp opHor, BufferedImageOp opVer) {
-        this.opHor = opHor;
-        this.opVer = opVer;
-    }
-    /*--------------------------------------------------------------------------------------------*/
-    public static GaussianBlur prepare(double sigmaHor, double sigmaVer, int width, int height) {
+    public  GaussianBlur(double sigma, int size) {
         
-        BufferedImageOp opHor = null;
-        if (sigmaVer != 0) {
-            float[] kernelValuesHor = gausianKernelValues(sigmaHor, width);
-            Kernel kernelHor = new Kernel(kernelValuesHor.length, 1, kernelValuesHor);
-            opHor = new ConvolveOp(kernelHor, ConvolveOp.EDGE_NO_OP, null);
+        BufferedImageOp horizontal = null;
+        BufferedImageOp vertical = null;
+        
+        if (sigma != 0) {           
+            
+            float[] kernelHorizontal = gausianKernel(sigma, size);
+            Kernel kernelHor = new Kernel(kernelHorizontal.length, 1, kernelHorizontal);
+            horizontal = new ConvolveOp(kernelHor, ConvolveOp.EDGE_NO_OP, null);
+            
+            float[] kernelVertical = gausianKernel(sigma, size);
+            Kernel kernelVer = new Kernel(1, kernelVertical.length, kernelVertical);
+            vertical = new ConvolveOp(kernelVer, ConvolveOp.EDGE_NO_OP, null);
         }
 
-        BufferedImageOp opVer = null;
-        if (sigmaVer != 0) {
-            float[] kernelValuesVer = gausianKernelValues(sigmaVer, height);
-            Kernel kernelVer = new Kernel(1, kernelValuesVer.length, kernelValuesVer);
-            opVer = new ConvolveOp(kernelVer, ConvolveOp.EDGE_NO_OP, null);
-        }
-        return new GaussianBlur(opHor, opVer);
+        this.opHor = horizontal;
+        this.opVer = vertical;
     }
         
     /*--------------------------------------------------------------------------------------------*/
-    public static double[][] kernel(int size, double sigma) {
+    public double[][] displayKernel(int size, double sigma) {
 
         int i, j, center;
         double sigma2, dem, x, y, sum;
@@ -68,7 +65,7 @@ public class GaussianBlur {
     }
 
     /*--------------------------------------------------------------------------------------------*/
-    private static float[] gausianKernelValues(double sigma, int n) {
+    private float[] gausianKernel(double sigma, int n) {
         
         double[] dvs = new double[n * 2 + 1];
         double sum = 0.0;

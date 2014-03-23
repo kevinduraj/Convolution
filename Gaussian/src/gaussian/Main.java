@@ -11,11 +11,14 @@ public class Main {
 
         BufferedImage img = ImageIO.read(new File("src/image/assignment03.png"));
 
-        GaussianBlur.kernel(15, 1.6);
-        GaussianBlur kevin = GaussianBlur.prepare(1.6, 1.6, 15, 15);
-        BufferedImage bi = kevin.filter(img);
+        //GaussianBlur.displayKernel(15, 1.6);
+        
+        GaussianBlur gausian2D = new GaussianBlur(1.6, 15);
+        gausian2D.displayKernel(15, 1.6);
+        gausian2D.filter(img);
+        BufferedImage bi = gausian2D.filter(img);
 
-        File outputfile = new File("src/image/GaussianBlured.png");
+        File outputfile = new File("src/image/GaussianBlured3.png");
         ImageIO.write(bi, "png", outputfile);
 
     }
