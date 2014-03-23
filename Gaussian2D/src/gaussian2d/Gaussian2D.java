@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 public class Gaussian2D {
     
     /* --------------------------------------------------------------------------------------------
-                        Compute Gaussian Kernel
+                            Compute Gaussian 2D Kernel
      ---------------------------------------------------------------------------------------------*/
 
     public  float[][] kernel( float sigma, int size) {
@@ -45,7 +45,7 @@ public class Gaussian2D {
     }
 
     /* --------------------------------------------------------------------------------------------
-     *                  Convolves Image with a Kernel 
+     *                      Convolves Image with a Kernel 
      * -------------------------------------------------------------------------------------------*/
     public  int[][] convolve(int[][] img, float[][] kernel) {
         
