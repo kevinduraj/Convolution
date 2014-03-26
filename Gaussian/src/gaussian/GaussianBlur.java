@@ -9,9 +9,14 @@ public class GaussianBlur {
     
     private final BufferedImageOp opHor;
     private final BufferedImageOp opVer;
+    private double sigma;
+    private int size;
     
     /*--------------------------------------------------------------------------------------------*/
     public  GaussianBlur(double sigma, int size) {
+        
+        this.sigma = sigma;
+        this.size = size;
         
         BufferedImageOp horizontal = null;
         BufferedImageOp vertical = null;
@@ -32,7 +37,7 @@ public class GaussianBlur {
     }
         
     /*--------------------------------------------------------------------------------------------*/
-    public double[][] displayKernel(int size, double sigma) {
+    public double[][] displayKernel() {
 
         int i, j, center;
         double sigma2, dem, x, y, sum;

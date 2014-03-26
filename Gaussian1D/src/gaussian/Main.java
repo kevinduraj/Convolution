@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Main {
 
+    /*--------------------------------------------------------------------------------------------*/
     public static void main(String[] args) throws IOException {
 
         System.out.println("Reading Image: src/image/assignment03.png");
@@ -36,5 +37,27 @@ public class Main {
         outputfile = new File("src/image/blur2.png");
         ImageIO.write(dest, "png", outputfile);        
     }
+    /*--------------------------------------------------------------------------------------------*/
+    /*--------------------------------------------------------------------------------------------*/
+    private static String Reflection(String filename, int size) throws IOException {
+        
+        String output = "src/image/ReflectionPadded.png";
+        ImageReflection ref = new ImageReflection();
+        //int[][] gray1 = ref.createImage(width, lenght);
+        //ref.writeImage(gray1, filename);
+        
+        FlipVerticaly(filename);
+        FlipHorizontaly(filename);
 
+        int[][]src = ref.ImageRead(filename);
+        int[][]vert = ref.ImageRead("src/image/vertical.png");
+        int[][]horiz = ref.ImageRead("src/image/horizontal.png");
+        int[][]larger = ref.reflection(src, vert, horiz, size);
+        
+        ref.writeImage(larger, output);
+        //int[][] gray4 = ref.flipLeft(gray1, 5);     
+        return output;
+    }    
+    /*--------------------------------------------------------------------------------------------*/
+    
 }
