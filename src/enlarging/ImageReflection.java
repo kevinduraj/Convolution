@@ -8,8 +8,17 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class ImageReflection {
+public final class ImageReflection {
 
+    private String input;
+    
+    /*--------------------------------------------------------------------------------------------*/
+    public ImageReflection(String input) throws IOException {
+        this.input = input;
+        FlipVerticaly();
+        FlipHorizontaly();
+        Rotate180();        
+    }
     /*--------------------------------------------------------------------------------------------*/
     public int[][] createImage(int width, int height) {
 
@@ -281,9 +290,9 @@ public class ImageReflection {
     }
     /*--------------------------------------------------------------------------------------------*/
     
-    public void FlipVerticaly(String filename) throws IOException {
+    public void FlipVerticaly() throws IOException {
 
-        image = ImageIO.read(new File(filename));
+        image = ImageIO.read(new File(input));
 
         // Flip the image vertically
         AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
@@ -296,9 +305,9 @@ public class ImageReflection {
     }
 
     /*--------------------------------------------------------------------------------------------*/
-    public  void FlipHorizontaly(String filename) throws IOException {
+    public  void FlipHorizontaly() throws IOException {
 
-        image = ImageIO.read(new File(filename));
+        image = ImageIO.read(new File(input));
 
         // Flip the image horizontally
         AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
@@ -311,9 +320,9 @@ public class ImageReflection {
 
     }
     /*--------------------------------------------------------------------------------------------*/
-    public void Rotate180(String filename) throws IOException {
+    public void Rotate180() throws IOException {
 
-        image = ImageIO.read(new File(filename));
+        image = ImageIO.read(new File(input));
 
         // Flip the image vertically and horizontally; equivalent to rotating the image 180 degrees
         AffineTransform tx = AffineTransform.getScaleInstance(-1, -1);

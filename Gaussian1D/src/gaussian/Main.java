@@ -42,7 +42,7 @@ public class Main {
     private static String Reflection(String filename, int size) throws IOException {
         
         String output = "src/image/ReflectionPadded.png";
-        ImageReflection ref = new ImageReflection();
+        ImageReflection ref = new ImageReflection(filename);
         //int[][] gray1 = ref.createImage(width, lenght);
         //ref.writeImage(gray1, filename);
         
