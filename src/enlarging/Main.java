@@ -7,57 +7,41 @@ import javax.imageio.ImageIO;
 
 public class Main {
 
-    static BufferedImage image;
-    static final boolean DEBUG = true;
+    private static String input = "src/image/Lenna.png";
+    private static String border = "src/image/Padded.png";
+    private static String output = "src/image2/reflection.png";
+    private static int size = 7;
+            
     /*--------------------------------------------------------------------------------------------*/
 
     public static void main(String[] args) throws IOException {
-
-        int size = 4;
-        //String input = "src/image/Lenna.png";
-        CreteTestImage("src/image/sample.png");
-
+       
         Padding padding = new Padding();
-        int[][] out = padding.add("src/image/sample.png", size);
-        //ImageDisplay(out);
-        ImageWrite(out, "src/image/padded.png");
+        int[][] out = padding.add(input, size);
+        //ImageDisplay(out);        
+        ImageWrite(out, "src/image/padded.png");        
         
         Reflection(size);
-        //System.out.println("New Image: " + output);
+        
     }
     /*--------------------------------------------------------------------------------------------*/
 
     private static void Reflection(int size) throws IOException {
 
-        Reflection ref = new Reflection("src/image/sample.png");
-
-        int[][] orig = ref.ImageRead("src/image/sample.png");
-        
-        int[][] padded = ref.ImageRead("src/image/padded.png");
-        
-        int[][] vert = ref.ImageRead("src/image/vertical.png");
-        System.out.println("Vertical");
-        ImageDisplay(vert);
-        
+        Reflection ref = new Reflection(input);
+        int[][] orig = ref.ImageRead(input);        
+        int[][] padded = ref.ImageRead(border);        
+        int[][] vert = ref.ImageRead("src/image/vertical.png");       
         int[][] horiz = ref.ImageRead("src/image/horizontal.png");
-        System.out.println("Horizontal");
-        ImageDisplay(horiz);
-        
         int[][] rotate = ref.ImageRead("src/image/rotate180.png");
-        System.out.println("Rotate");
-        ImageDisplay(rotate);
 
         padded = ref.reflection(padded, orig, vert, horiz, rotate, size);
-        ImageWrite(padded, "src/image2/refletion.png");
-        System.out.println("Reflection");
-        ImageDisplay(padded);
-
+        ImageWrite(padded, output);
         
-
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    private static void CreteTestImage(String input) throws IOException {
+    private static void CreateTestImage(String input) throws IOException {
 
         int width, height;
         width = height = 15;
@@ -105,7 +89,6 @@ public class Main {
             for (int j = 0; j < img[i].length; j++) {
 
                 System.out.format("%3d ", img[i][j]);
-
             }
             System.out.println();
         }

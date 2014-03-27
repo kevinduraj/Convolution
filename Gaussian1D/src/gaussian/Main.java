@@ -8,45 +8,27 @@ import javax.imageio.ImageIO;
 
 public class Main {
 
+      private static final String input = "src/image/reflection.png";   
+      private static final String output = "src/image/program2.png"; 
+
     /*--------------------------------------------------------------------------------------------*/
     public static void main(String[] args) throws IOException {
         
-        /* Reflection Padding */
-        String input = "src/image/assignment03.png";
-        String output = Reflection(input, 15);
-        //System.out.println("New Image: " + output);
-        
-        String final_image = Gaussian1D(output);
+        String final_image = Gaussian1D();
         
         Statistics stat = new Statistics(final_image);
         System.out.println("\n\n" + final_image);
         System.out.format("Mean     : %.3f\n\n", + stat.getMean());        
                 
     }
-    /*--------------------------------------------------------------------------------------------*/         
-    private static String Reflection(String input, int size) throws IOException {
-        
-        String output = "src/image/ReflectionPadded.png";
-        ImageReflection ref = new ImageReflection(input);
-        
-        int[][]src = ref.ImageRead(input);
-        int[][]vert = ref.ImageRead("src/image/vertical.png");
-        int[][]horiz = ref.ImageRead("src/image/horizontal.png");
-        int[][]larger = ref.reflection(src, vert, horiz, size);
-        
-        ref.ImageWrite(larger, output); 
-    
-        return output;
-    }
     /*--------------------------------------------------------------------------------------------*/
 
-    private static String Gaussian1D(String source) throws IOException {
+    private static String Gaussian1D() throws IOException {
 
         String gaussian1 = "src/image/gaussian_blur1.png";
-        String gaussian2 = "src/image/program2.png";
         
         //System.out.println("Reading Image: src/image/assignment03.png");
-        BufferedImage src = ImageIO.read(new File(source));
+        BufferedImage src = ImageIO.read(new File(input));
         BufferedImage dest = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
         
         //System.out.println("Computing Gaussian Kernel");
@@ -68,9 +50,10 @@ public class Main {
         cop.filter(src, dest);
 
         // Writing to a file
-        outputfile = new File(gaussian2);
+        outputfile = new File(output);
         ImageIO.write(dest, "png", outputfile);    
         
-        return gaussian2;
+        return output;
     }
+    /*--------------------------------------------------------------------------------------------*/
 }

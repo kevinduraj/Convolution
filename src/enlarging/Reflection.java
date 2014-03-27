@@ -63,41 +63,6 @@ public final class Reflection {
         System.out.println();
     }
     /*--------------------------------------------------------------------------------------------*/
-
-    int[][] flipLeft(int[][] source, int kernel) {
-
-        int size = kernel / 2;
-        int img[][] = new int[source.length + size][source[0].length + size];
-
-        //for (int i = 0; i < source.length; i++) {
-        for (int i = source.length - 1; i >= 0; i--) {
-            //for(int j = source[0].length - 1; j>=0; j--) {
-            for (int j = 0; j < source[i].length; j++) {
-                System.out.format("%3d ", source[i][j]);
-            }
-            System.out.println();
-        }
-
-        return img;
-    }
-    /*--------------------------------------------------------------------------------------------*/
-
-    int[][] flipOver(int[][] source, int kernel) {
-
-        int size = kernel / 2;
-        int img[][] = new int[source.length + size][source[0].length + size];
-
-        for (int i = source.length - 1; i >= 0; i--) {
-            for (int j = source[0].length - 1; j >= 0; j--) {
-                System.out.format("%3d ", source[i][j]);
-            }
-            System.out.println();
-        }
-
-        return img;
-    }
-
-    /*--------------------------------------------------------------------------------------------*/
     public int[][] reflection(int[][] padded, int orig[][], int vert[][], int horiz[][], int rotate[][], int size) {
 
         int rows = orig.length;
