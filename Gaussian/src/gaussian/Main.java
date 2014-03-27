@@ -24,5 +24,5 @@ public class Main {
         //File outputfile = new File("src/image/GaussianBlured3.png");
         //ImageIO.write(bi, "png", outputfile);
     }
-
 }
+/*----------------------------------------------------------------------------*/

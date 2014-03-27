@@ -1,6 +1,5 @@
 package enlarging;
 
-import static enlarging.Main.image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -11,6 +10,7 @@ import javax.imageio.ImageIO;
 public final class ImageReflection {
 
     private String input;
+    static BufferedImage image;
     
     /*--------------------------------------------------------------------------------------------*/
     public ImageReflection(String input) throws IOException {
