@@ -55,7 +55,6 @@ public final class ImageReflection {
             for (int j = 0; j < img[i].length; j++) {
 
                 System.out.format("%3d ", img[i][j]);
-
             }
             System.out.println();
         }

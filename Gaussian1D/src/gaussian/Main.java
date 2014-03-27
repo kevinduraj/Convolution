@@ -14,9 +14,14 @@ public class Main {
         /* Reflection Padding */
         String input = "src/image/assignment03.png";
         String output = Reflection(input, 15);
-        System.out.println("New Image: " + output);
+        //System.out.println("New Image: " + output);
         
-        Gaussian1D(output);                
+        String final_image = Gaussian1D(output);
+        
+        Statistics stat = new Statistics(final_image);
+        System.out.println("\n\n" + final_image);
+        System.out.format("Mean     : %.3f\n\n", + stat.getMean());        
+                
     }
     /*--------------------------------------------------------------------------------------------*/         
     private static String Reflection(String input, int size) throws IOException {
@@ -35,20 +40,20 @@ public class Main {
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    private static void Gaussian1D(String source) throws IOException {
+    private static String Gaussian1D(String source) throws IOException {
 
         String gaussian1 = "src/image/gaussian_blur1.png";
-        String gaussian2 = "src/image/gaussian_blur2.png";
+        String gaussian2 = "src/image/program2.png";
         
-        System.out.println("Reading Image: src/image/assignment03.png");
+        //System.out.println("Reading Image: src/image/assignment03.png");
         BufferedImage src = ImageIO.read(new File(source));
         BufferedImage dest = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
         
-        System.out.println("Computing Gaussian Kernel");
+        //System.out.println("Computing Gaussian Kernel");
         GaussianBlur gb = new GaussianBlur();
         ConvolveOp cop = gb.getGaussianBlurFilter(15, 1.6f, true);
         
-        System.out.println("Computing Gaussian Horizontal Blur");
+        //System.out.println("Computing Gaussian Horizontal Blur");
         cop.filter(src, dest);
         
         // Writing to a file
@@ -59,11 +64,13 @@ public class Main {
         dest = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
         cop = gb.getGaussianBlurFilter(15, 1.6f, false);
 
-        System.out.println("Computing Gaussian Vertical Blur");
+        //System.out.println("Computing Gaussian Vertical Blur");
         cop.filter(src, dest);
 
         // Writing to a file
         outputfile = new File(gaussian2);
-        ImageIO.write(dest, "png", outputfile);        
+        ImageIO.write(dest, "png", outputfile);    
+        
+        return gaussian2;
     }
 }

@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 public class Sobel {
 
     /*--------------------------------------------------------------------------------------------*/
-    public void process(String filename) {
+    public String process(String filename) {
 
         int[][] img = ImageRead(filename);
         int rows = img.length;
@@ -45,6 +45,8 @@ public class Sobel {
         ImageWrite("src/image/Lenna_GX.png", Gx);
         ImageWrite("src/image/Lenna_GY.png", Gy);
         ImageWrite("src/image/Lenna_G.png", G);
+        
+        return "src/image/Lenna_G.png";
     }
     /*--------------------------------------------------------------------------------------------*/
 

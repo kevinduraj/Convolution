@@ -12,7 +12,7 @@ public class Gaussian2D {
                             Compute Gaussian 2D Kernel
      ---------------------------------------------------------------------------------------------*/
 
-    public  float[][] kernel( float sigma, int size) {
+    public  float[][] kernel( float sigma, int size, boolean print) {
 
         float[][] kernel = new float[size][size];
         int uc, vc;
@@ -29,9 +29,9 @@ public class Gaussian2D {
                 g = (float) exp(-(uc * uc + vc * vc) / (2 * sigma * sigma));
                 sum += g;
                 kernel[u][v] = g;
-                System.out.format("%.6f ", g);
+                if(print) System.out.format("%.6f ", g);
             }
-            System.out.println();
+            if(print) System.out.println();
         }
         
         //--- NORMALIZE: Total of all kernel's elemenents = 1.0 ---//
