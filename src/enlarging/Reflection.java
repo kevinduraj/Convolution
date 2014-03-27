@@ -11,40 +11,17 @@ public final class Reflection {
 
     private String input;
     static BufferedImage image;
-    
+
     /*--------------------------------------------------------------------------------------------*/
     public Reflection(String input) throws IOException {
         this.input = input;
-        
+
         FlipVerticaly();
         FlipHorizontaly();
-        Rotate180();        
+        Rotate180();
     }
+
     /*--------------------------------------------------------------------------------------------*/
-    public Reflection() throws IOException  {
-        this.input = "src/image/sample.png";
-        int[][] gray = createImage(10, 10);
-        ImageWrite(gray, input);
-        FlipVerticaly();
-        FlipHorizontaly();
-        Rotate180();    
-    }    
-    /*--------------------------------------------------------------------------------------------*/
-    public int[][] createImage(int width, int height) {
-
-        int gray[][] = new int[width][height];
-        int counter = 0;
-
-        for (int i = 0; i < gray.length; ++i) {
-            for (int j = 0; j < gray[i].length; ++j) {
-
-                gray[i][j] = counter++;
-            }
-        }
-        return gray;
-    }
-    /*--------------------------------------------------------------------------------------------*/
-
     public int[][] reflection(int img[][], int size) {
 
         int gray[][] = new int[img.length + size * 2][img[0].length + size * 2];
@@ -59,20 +36,6 @@ public final class Reflection {
     }
 
     /*--------------------------------------------------------------------------------------------*/
-    public void displayImage(int img[][]) {
-
-        for (int i = 0; i < img.length; i++) {
-            for (int j = 0; j < img[i].length; j++) {
-
-                System.out.format("%3d ", img[i][j]);
-
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-    /*--------------------------------------------------------------------------------------------*/
-
     public void displayBorder(int img[][]) {
 
         for (int i = 0; i < img.length; i++) {
@@ -135,27 +98,42 @@ public final class Reflection {
     }
 
     /*--------------------------------------------------------------------------------------------*/
-    private int[][] fillLarger(int src[][], int size) {
-
-        int[][] img = new int[src.length + (size*2)][src[0].length + (size*2)];
-
-        for (int i = 0; i < img.length-size; i++) {
-            for (int j = 0; j < img[i].length-size; j++) {
-                img[i][j] = 1;//img[i][j];
-            }
-        }
-
-        return img;
-    }
-    /*--------------------------------------------------------------------------------------------*/
-
     public int[][] reflection(int[][] padded, int orig[][], int vert[][], int horiz[][], int rotate[][], int size) {
 
-        int cols = orig.length;
-        int rows = orig[0].length;
+        int rows = orig.length;
+        int cols = orig[0].length;
 
         int nrow = padded.length;
         int ncol = padded[0].length;
+
+        //--- Left Side ---//       
+        for (int i=size; i < rows + size; i++) { 
+            for (int c = 1, j = size-1; j >= 0; c++, j--) {
+                padded[i][j] = horiz[i - size][cols - c];
+            }
+        }        
+
+        //--- Right Side ---//
+        for (int i = size; i < rows+size; i++) { 
+            for (int c = 0, j = ncol - size; j < ncol; c++, j++) { 
+                padded[i][j] = horiz[i-size][c];
+            }
+        }        
+        
+        //--- Top Side  ----//
+        for (int i = 0; i < size; i++) {
+            for (int j = size; j < cols + size; j++) {
+                padded[i][j] = vert[(cols - size) + i][j - size];
+            }
+        }        
+
+        //--- Bottom Side ---//
+        for (int i = nrow - size; i < nrow; i++) { // vertical
+            for (int j = 0; j < cols; j++) { // horizontal
+                padded[i][size + j] = vert[i - (nrow - size)][j];
+            }
+        }        
+        
 
         //--- Top Left Corner ----//
         //for (int i = 0; i < size; i++) { // vertical
@@ -164,17 +142,6 @@ public final class Reflection {
         //        padded[i][j] = 1;
         //    }
         //}
-
-        //--- Left Side  ----//
-        //for (int i = size, x=0; i < rows+size-1; x++, i++) {
-          for (int i=rows-size, x=0; i >0; x++, i--) {
-            //for (int j=0, y=0; j<size; y++, j++) { 
-              for (int j=size, y=0; j>=0; y++, j--) {               
-                padded[i][j] = 2;//orig[x][y];
-            }
-        }
-
-        
         //--- Right Side ----//
         //for (int i = size; i < cols + size; i++) { // vertical
         //    for (int c=0, j=ncol-size-1; j < ncol; c++, j++) { // horizontal
@@ -182,7 +149,6 @@ public final class Reflection {
         //        padded[i][j] = 2;
         //    }
         //}
-
         //--- Top Side ---//
         //for (int i = 0; i < size; i++) { // vertical
         //    for (int j = size; j < rows + size; j++) { // horizontal
@@ -191,38 +157,38 @@ public final class Reflection {
         //    }
         //}
         /*        //--- Bottom Side ----//
-        for (int i = nrow-size-1; i < nrow; i++) { // vertical
-        for (int j = size; j < rows+size; j++) { // horizontal
-        //img[i][half + j] = vert[i - (height2 - half-1)][j];
-        padded[i][j] = 4;
-        }
-        }
+         for (int i = nrow-size-1; i < nrow; i++) { // vertical
+         for (int j = size; j < rows+size; j++) { // horizontal
+         //img[i][half + j] = vert[i - (height2 - half-1)][j];
+         padded[i][j] = 4;
+         }
+         }
         
-        //---- Top Left Corner ----//
-        for(int c=1, x=0; x<size; c++, x++) {
-        //padded[x][x] = orig[size-c][size-c];
-        //img[x][x] = 5;
-        }
+         //---- Top Left Corner ----//
+         for(int c=1, x=0; x<size; c++, x++) {
+         //padded[x][x] = orig[size-c][size-c];
+         //img[x][x] = 5;
+         }
         
-        //---- Bottom Right Corner ---//
-        for(int c=size, x=nrow; x>=nrow-size; c--, x--) {
-        //padded[x-1][x-1] = rotate[c][c];
-        }
+         //---- Bottom Right Corner ---//
+         for(int c=size, x=nrow; x>=nrow-size; c--, x--) {
+         //padded[x-1][x-1] = rotate[c][c];
+         }
         
-        //---- Top Right Corner ---//
-        for(int c=size, i=0, j=ncol-1; i<=size; c--, i++, j--) {
-        //img[i][j] = src[c-1][width1-c];
-        //padded[i][j] = horiz[c+1][c];
-        }
+         //---- Top Right Corner ---//
+         for(int c=size, i=0, j=ncol-1; i<=size; c--, i++, j--) {
+         //img[i][j] = src[c-1][width1-c];
+         //padded[i][j] = horiz[c+1][c];
+         }
         
-        //---- Left Bottom Corner ---//
-        for(int c=size, i=nrow-1, j=0; j<size; c--, i--, j++) {
-        //padded[i][j] = orig[cols-c][c-1+1];
-        }*/
-        
+         //---- Left Bottom Corner ---//
+         for(int c=size, i=nrow-1, j=0; j<size; c--, i--, j++) {
+         //padded[i][j] = orig[cols-c][c-1+1];
+         }*/
         return padded;
     }
     /*--------------------------------------------------------------------------------------------*/
+
     public void displayReflection(int img[][]) {
 
         for (int i = 0; i < img.length; i++) {
@@ -295,27 +261,6 @@ public final class Reflection {
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    public void ImageWrite(int img[][], String filename) {
-
-        try {
-            BufferedImage bi = new BufferedImage(img[0].length, img.length, BufferedImage.TYPE_INT_RGB);
-
-            for (int i = 0; i < bi.getHeight(); ++i) {
-                for (int j = 0; j < bi.getWidth(); ++j) {
-                    int val = img[i][j];
-                    int pixel = (val << 16) | (val << 8) | (val);
-                    bi.setRGB(j, i, pixel);
-                }
-            }
-
-            File outputfile = new File(filename);
-            ImageIO.write(bi, "png", outputfile);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-    }
-    /*--------------------------------------------------------------------------------------------*/
-    
     public void FlipVerticaly() throws IOException {
 
         image = ImageIO.read(new File(input));
@@ -331,7 +276,7 @@ public final class Reflection {
     }
 
     /*--------------------------------------------------------------------------------------------*/
-    public  void FlipHorizontaly() throws IOException {
+    public void FlipHorizontaly() throws IOException {
 
         image = ImageIO.read(new File(input));
 
@@ -346,6 +291,7 @@ public final class Reflection {
 
     }
     /*--------------------------------------------------------------------------------------------*/
+
     public void Rotate180() throws IOException {
 
         image = ImageIO.read(new File(input));

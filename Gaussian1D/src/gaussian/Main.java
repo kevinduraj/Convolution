@@ -34,7 +34,7 @@ public class Main {
         int[][]horiz = ref.ImageRead("src/image/horizontal.png");
         int[][]larger = ref.reflection(src, vert, horiz, size);
         
-        ref.writeImage(larger, output); 
+        ref.ImageWrite(larger, output); 
     
         return output;
     }

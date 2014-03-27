@@ -1,7 +1,5 @@
 package enlarging;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,28 +15,14 @@ public class Main {
 
         int size = 4;
         //String input = "src/image/Lenna.png";
-        //SampleImage("src/image/sample.png");
+        CreteTestImage("src/image/sample.png");
 
-        image = ImageIO.read(new File("src/image/Lenna.png"));
-        int w=10;
-        BufferedImage newImage = new BufferedImage(image.getWidth() + 2 * w, image.getHeight(), image.getType());
-
-        Graphics g = newImage.getGraphics();
-
-        g.setColor(Color.BLUE);
-        g.fillRect(0, 0, image.getWidth() + 2 * w, image.getHeight());
-        g.drawImage(image, w, 0, null);
-        g.dispose();
+        Padding padding = new Padding();
+        int[][] out = padding.add("src/image/sample.png", size);
+        //ImageDisplay(out);
+        ImageWrite(out, "src/image/padded.png");
         
-
-        File outputfile = new File("src/image/saved.png");
-        ImageIO.write(newImage, "png", outputfile);
-
-        //Padding padding = new Padding();
-        //int[][] out = padding.add("src/image/sample.png", size);
-        //padding.display(out);
-        //padding.ImageWrite(out, "src/image/padded.png");
-        //Reflection(size);
+        Reflection(size);
         //System.out.println("New Image: " + output);
     }
     /*--------------------------------------------------------------------------------------------*/
@@ -48,25 +32,84 @@ public class Main {
         Reflection ref = new Reflection("src/image/sample.png");
 
         int[][] orig = ref.ImageRead("src/image/sample.png");
+        
         int[][] padded = ref.ImageRead("src/image/padded.png");
+        
         int[][] vert = ref.ImageRead("src/image/vertical.png");
+        System.out.println("Vertical");
+        ImageDisplay(vert);
+        
         int[][] horiz = ref.ImageRead("src/image/horizontal.png");
+        System.out.println("Horizontal");
+        ImageDisplay(horiz);
+        
         int[][] rotate = ref.ImageRead("src/image/rotate180.png");
+        System.out.println("Rotate");
+        ImageDisplay(rotate);
 
         padded = ref.reflection(padded, orig, vert, horiz, rotate, size);
-        ref.ImageWrite(padded, "src/image/refletion.png");
-        ref.displayImage(padded);
+        ImageWrite(padded, "src/image2/refletion.png");
+        System.out.println("Reflection");
+        ImageDisplay(padded);
+
+        
 
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    private static void SampleImage(String input) throws IOException {
+    private static void CreteTestImage(String input) throws IOException {
 
-        Reflection ref = new Reflection();
-        int[][] test = ref.createImage(15, 15);
-        ref.ImageWrite(test, input);
-        ref.displayImage(test);
+        int width, height;
+        width = height = 15;
 
+        int gray[][] = new int[width][height];
+        int counter = 0;
+
+        for (int i = 0; i < gray.length; ++i) {
+            for (int j = 0; j < gray[i].length; ++j) {
+
+                gray[i][j] = counter++;
+            }
+        }
+
+        ImageWrite(gray, input);
+        ImageDisplay(gray);
+
+    }
+    /*--------------------------------------------------------------------------------------------*/
+
+    public static void ImageWrite(int img[][], String filename) {
+
+        try {
+            BufferedImage bi = new BufferedImage(img[0].length, img.length, BufferedImage.TYPE_INT_RGB);
+
+            for (int i = 0; i < bi.getHeight(); ++i) {
+                for (int j = 0; j < bi.getWidth(); ++j) {
+                    int val = img[i][j];
+                    int pixel = (val << 16) | (val << 8) | (val);
+                    bi.setRGB(j, i, pixel);
+                }
+            }
+
+            File outputfile = new File(filename);
+            ImageIO.write(bi, "png", outputfile);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+    /*--------------------------------------------------------------------------------------------*/
+
+    public static void ImageDisplay(int img[][]) {
+
+        for (int i = 0; i < img.length; i++) {
+            for (int j = 0; j < img[i].length; j++) {
+
+                System.out.format("%3d ", img[i][j]);
+
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
     /*--------------------------------------------------------------------------------------------*/
 }

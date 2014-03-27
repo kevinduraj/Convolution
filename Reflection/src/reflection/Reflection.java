@@ -1,4 +1,4 @@
-package gaussian;
+package reflection;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -7,13 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public final class ImageReflection {
+public final class Reflection {
 
     private String input;
     static BufferedImage image;
     
     /*--------------------------------------------------------------------------------------------*/
-    public ImageReflection(String input) throws IOException {
+    public Reflection(String input) throws IOException {
         this.input = input;
         FlipVerticaly();
         FlipHorizontaly();
@@ -269,7 +269,7 @@ public final class ImageReflection {
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    public void ImageWrite(int img[][], String filename) {
+    public void writeImage(int img[][], String filename) {
 
         try {
             BufferedImage bi = new BufferedImage(img[0].length, img.length, BufferedImage.TYPE_INT_RGB);

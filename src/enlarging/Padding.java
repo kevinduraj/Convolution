@@ -13,13 +13,13 @@ public class Padding {
         int row = src.length;
         int col = src[0].length;
 
-        int nrow = src.length + (size * 2)-1;
-        int ncol = src[0].length + (size * 2)-1;
+        int nrow = src.length + (size * 2);
+        int ncol = src[0].length + (size * 2);
 
         int[][] image = new int[nrow][ncol];
 
-        for (int i = 0; i < row-1; i++) {
-            for (int j = 0; j < col-1; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 image[i+size][j+size] = src[i][j];
             }
         }
@@ -73,19 +73,6 @@ public class Padding {
         } catch (IOException e) {
             System.out.println(e);
         }
-    }    
-    /*--------------------------------------------------------------------------------------------*/
-    public void display(int img[][]) {
-
-        for (int i = 0; i < img.length; i++) {
-            for (int j = 0; j < img[i].length; j++) {
-
-                System.out.format("%3d ", img[i][j]);
-
-            }
-            System.out.println();
-        }
-        System.out.println();
     }    
     /*--------------------------------------------------------------------------------------------*/
 }
