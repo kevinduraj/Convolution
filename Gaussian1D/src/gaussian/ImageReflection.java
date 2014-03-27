@@ -1,12 +1,24 @@
 package gaussian;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class ImageReflection {
+public final class ImageReflection {
 
+    private String input;
+    static BufferedImage image;
+    
+    /*--------------------------------------------------------------------------------------------*/
+    public ImageReflection(String input) throws IOException {
+        this.input = input;
+        FlipVerticaly();
+        FlipHorizontaly();
+        Rotate180();        
+    }
     /*--------------------------------------------------------------------------------------------*/
     public int[][] createImage(int width, int height) {
 
@@ -275,6 +287,52 @@ public class ImageReflection {
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+    /*--------------------------------------------------------------------------------------------*/
+    
+    public void FlipVerticaly() throws IOException {
+
+        image = ImageIO.read(new File(input));
+
+        // Flip the image vertically
+        AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+        tx.translate(0, -image.getHeight(null));
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        BufferedImage bi = op.filter(image, null);
+
+        File outputfile = new File("src/image/vertical.png");
+        ImageIO.write(bi, "png", outputfile);
+    }
+
+    /*--------------------------------------------------------------------------------------------*/
+    public  void FlipHorizontaly() throws IOException {
+
+        image = ImageIO.read(new File(input));
+
+        // Flip the image horizontally
+        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+        tx.translate(-image.getWidth(null), 0);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        BufferedImage bi = op.filter(image, null);
+
+        File outputfile = new File("src/image/horizontal.png");
+        ImageIO.write(bi, "png", outputfile);
+
+    }
+    /*--------------------------------------------------------------------------------------------*/
+    public void Rotate180() throws IOException {
+
+        image = ImageIO.read(new File(input));
+
+        // Flip the image vertically and horizontally; equivalent to rotating the image 180 degrees
+        AffineTransform tx = AffineTransform.getScaleInstance(-1, -1);
+        tx.translate(-image.getWidth(null), -image.getHeight(null));
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        BufferedImage bi = op.filter(image, null);
+
+        File outputfile = new File("src/image/rotate180.png");
+        ImageIO.write(bi, "png", outputfile);
+
     }
     /*--------------------------------------------------------------------------------------------*/
 
