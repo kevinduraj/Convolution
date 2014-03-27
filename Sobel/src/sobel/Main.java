@@ -5,6 +5,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        
         /* Reflection Padding */
         String input = "src/image/assignment03.png";
         String output = Reflection(input, 15);

@@ -7,18 +7,28 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public final class ImageReflection {
+public final class Reflection {
 
     private String input;
     static BufferedImage image;
     
     /*--------------------------------------------------------------------------------------------*/
-    public ImageReflection(String input) throws IOException {
+    public Reflection(String input) throws IOException {
         this.input = input;
+        
         FlipVerticaly();
         FlipHorizontaly();
         Rotate180();        
     }
+    /*--------------------------------------------------------------------------------------------*/
+    public Reflection() throws IOException  {
+        this.input = "src/image/sample.png";
+        int[][] gray = createImage(10, 10);
+        ImageWrite(gray, input);
+        FlipVerticaly();
+        FlipHorizontaly();
+        Rotate180();    
+    }    
     /*--------------------------------------------------------------------------------------------*/
     public int[][] createImage(int width, int height) {
 
@@ -127,11 +137,11 @@ public final class ImageReflection {
     /*--------------------------------------------------------------------------------------------*/
     private int[][] fillLarger(int src[][], int size) {
 
-        int[][] img = new int[src.length + size][src[0].length + size];
+        int[][] img = new int[src.length + (size*2)][src[0].length + (size*2)];
 
-        for (int i = 0; i < src.length; i++) {
-            for (int j = 0; j < src[i].length; j++) {
-                img[i + size / 2][j + size / 2] = src[i][j];
+        for (int i = 0; i < img.length-size; i++) {
+            for (int j = 0; j < img[i].length-size; j++) {
+                img[i][j] = 1;//img[i][j];
             }
         }
 
@@ -139,62 +149,78 @@ public final class ImageReflection {
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    public int[][] reflection(int src[][], int vert[][], int horiz[][], int kernel) {
+    public int[][] reflection(int[][] padded, int orig[][], int vert[][], int horiz[][], int rotate[][], int size) {
 
-        int half = kernel / 2; 
-        int height1 = src.length;
-        int width1 = src[0].length;
+        int cols = orig.length;
+        int rows = orig[0].length;
 
-        int[][] img = fillLarger(src, kernel);
-        int height2 = img.length;
-        int width2 = img[0].length;
+        int nrow = padded.length;
+        int ncol = padded[0].length;
 
-        //--- Left Side ----//
-        for (int i = half; i < height1 + half; i++) { // vertical
-            for (int c = 1, j = half-1; j >= 0; c++, j--) { // horizontal
-                img[i][j] = horiz[i - half][width1 - c];
+        //--- Top Left Corner ----//
+        //for (int i = 0; i < size; i++) { // vertical
+        //    for (int j=0; j<size; j++) { // horizontal
+        //        //padded[i][j] = horiz[i - size][rows - c];
+        //        padded[i][j] = 1;
+        //    }
+        //}
+
+        //--- Left Side  ----//
+        //for (int i = size, x=0; i < rows+size-1; x++, i++) {
+          for (int i=rows-size, x=0; i >0; x++, i--) {
+            //for (int j=0, y=0; j<size; y++, j++) { 
+              for (int j=size, y=0; j>=0; y++, j--) {               
+                padded[i][j] = 2;//orig[x][y];
             }
         }
 
+        
         //--- Right Side ----//
-        for (int i = half; i < height1+half; i++) { // vertical
-            for (int c = 0, j = width2 - half; j < width2; c++, j++) { // horizontal
-                img[i][j] = horiz[i-half][c];
-            }
-        }
+        //for (int i = size; i < cols + size; i++) { // vertical
+        //    for (int c=0, j=ncol-size-1; j < ncol; c++, j++) { // horizontal
+        //        //img[i][j] = horiz[i-half][c];
+        //        padded[i][j] = 2;
+        //    }
+        //}
 
         //--- Top Side ---//
-        for (int i = 0; i < half; i++) { // vertical
-            for (int j = half; j < width1 + half; j++) { // horizontal
-                img[i][j] = vert[(width1 - half) + i][j - half];
-            }
+        //for (int i = 0; i < size; i++) { // vertical
+        //    for (int j = size; j < rows + size; j++) { // horizontal
+        //        //img[i][j] = vert[(width1 - half) + i][j - half];
+        //        padded[i][j] = 3;
+        //    }
+        //}
+        /*        //--- Bottom Side ----//
+        for (int i = nrow-size-1; i < nrow; i++) { // vertical
+        for (int j = size; j < rows+size; j++) { // horizontal
+        //img[i][half + j] = vert[i - (height2 - half-1)][j];
+        padded[i][j] = 4;
         }
-        //--- Bottom Side ----//
-        for (int i = height2 - half; i < height2; i++) { // vertical
-            for (int j = 0; j < width1; j++) { // horizontal
-                img[i][half + j] = vert[i - (height2 - half)][j];
-            }
         }
         
-        //---- Left Top Corner ----//
-        for(int c=1, x=0; x<half; c++, x++) 
-                img[x][x] = src[half-c][half-c];
-
-        //---- Right Bottom Corner ---//
-        for(int c=half, x=height2-1; x>=height2-half; c--, x--) 
-                img[x][x] = src[height1-c][width1-c];
+        //---- Top Left Corner ----//
+        for(int c=1, x=0; x<size; c++, x++) {
+        //padded[x][x] = orig[size-c][size-c];
+        //img[x][x] = 5;
+        }
         
-        //---- RightTop Corner ---//
-        for(int c=half, i=0, j=width2-1; i<half; c--, i++, j--) {
-                img[i][j] = src[c-1][width1-c];         
+        //---- Bottom Right Corner ---//
+        for(int c=size, x=nrow; x>=nrow-size; c--, x--) {
+        //padded[x-1][x-1] = rotate[c][c];
+        }
+        
+        //---- Top Right Corner ---//
+        for(int c=size, i=0, j=ncol-1; i<=size; c--, i++, j--) {
+        //img[i][j] = src[c-1][width1-c];
+        //padded[i][j] = horiz[c+1][c];
         }
         
         //---- Left Bottom Corner ---//
-        for(int c=half, i=height2-1, j=0; j<half; c--, i--, j++) {
-                img[i][j] = src[height1-c][c-1];         
-        }
+        for(int c=size, i=nrow-1, j=0; j<size; c--, i--, j++) {
+        //padded[i][j] = orig[cols-c][c-1+1];
+        }*/
         
-        return img;
+        return padded;
     }
     /*--------------------------------------------------------------------------------------------*/
     public void displayReflection(int img[][]) {
@@ -269,7 +295,7 @@ public final class ImageReflection {
     }
     /*--------------------------------------------------------------------------------------------*/
 
-    public void writeImage(int img[][], String filename) {
+    public void ImageWrite(int img[][], String filename) {
 
         try {
             BufferedImage bi = new BufferedImage(img[0].length, img.length, BufferedImage.TYPE_INT_RGB);

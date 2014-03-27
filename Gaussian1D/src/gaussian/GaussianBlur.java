@@ -14,7 +14,6 @@ public class GaussianBlur {
         int size = radius * 2 + 1;
         float[] data = new float[size];
 
-        //float sigma = radius / 3.0f;
         float twoSigmaSquare = 2.0f * sigma * sigma;
         float sigmaRoot = (float) Math.sqrt(twoSigmaSquare * Math.PI);
         float total = 0.0f;
